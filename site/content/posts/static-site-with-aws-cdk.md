@@ -17,7 +17,7 @@ Welcome! I thought it would be fitting for my first post on this blog to be abou
 
 ## What we will build
 
-We will build a static website - a blog - using the website generator [Hugo](https://gohugo.io/). Then, we will deploy this to [AWS]() by using the infrastructure-as-code tool [CDK](). We will end up with one git repository which contains both the source code for the website as well as the source code for the infrastructure.
+We will build a static website - a blog - using the website generator [Hugo](https://gohugo.io/). Then, we will deploy this to [AWS](https://aws.amazon.com/) by using the infrastructure-as-code tool [CDK](https://aws.amazon.com/cdk/). We will end up with one git repository which contains both the source code for the website as well as the source code for the infrastructure.
 
 ## Building the website
 
@@ -114,6 +114,24 @@ hugo
 ```
 
 Your static site is now built in `public/` ready to be deployed to some hosting. Take a break - you've earned it - and let's proceed to deployment next.
+
+## Deploying to AWS using CDK
+
+### AWS
+
+I will not go too deeply into what AWS or CDK are here. You can read about that on their websites or in many other locations. Let's stay short and to the point in this post. AWS Free Tier gives you enough to complete this tutorial and hosting a static site for free. Note, however, that it is possible to incur costs by using AWS if you go above the limits of the free tier.
+
+First, you need an AWS account if you don't have one already. Go to [AWS](https://aws.amazon.com/) and sign up. They require you to fill in quite a lot of details here including card information, which can seem scary, but as mentioned above it will be fine as long as you don't start any other resources. If you are nervous about it, you can go to "My Billing Dashboard", "Billing Preferences", and then check the "Receive Free Tier Usage Alerts" button (which is, sneakily, not checked by default) and you will receive an alert when you are close to having to pay.
+
+While you're in the AWS console, you might as well go and create an access key to use later for CDK. Go to the service _IAM_. There should be a quick link to _My access key_. Create a new one and download it.
+
+### Installing CDK
+
+Now we need to install AWS CDK which is somewhat of a process when doing it from scratch. Rather than repeating all of it, I will direct you to [AWS CDK's Getting Started article](https://docs.aws.amazon.com/cdk/latest/guide/getting_started.html). You might want to skip the _Your background_ and _Key concepts_ part for now, installation instructions come after that. Use the access key you created in the previous step. Make sure to complete bootstrapping.
+
+Now that you have the CDK client installed it is time for the fun part: setting up some infrastructure - with code!
+
+### Deploying using CDK
 
 
 
