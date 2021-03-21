@@ -197,13 +197,13 @@ This command compiles your code into a CloudFormation template. You should see s
 ```yaml
 Resources:
   CDKMetadata:
-      Type: AWS::CDK::Metadata
-          Properties:
-                Modules: aws-cdk=1.92.0,@aws-cdk/cloud-assembly-schema=1.92.0,@aws-cdk/core=1.92.0,@aws-cdk/cx-api=1.92.0,@aws-cdk/region-info=1.92.0,jsii-runtime=node.js/v12.19.0
-                    Metadata:
-                          aws:cdk:path: InfraStack/CDKMetadata/Default
-                              Condition: CDKMetadataAvailable
-                              Conditions:
+    Type: AWS::CDK::Metadata
+      Properties:
+        Modules: aws-cdk=1.92.0,@aws-cdk/cloud-assembly-schema=1.92.0,@aws-cdk/core=1.92.0,@aws-cdk/cx-api=1.92.0,@aws-cdk/region-info=1.92.0,jsii-runtime=node.js/v12.19.0
+          Metadata:
+            aws:cdk:path: InfraStack/CDKMetadata/Default
+              Condition: CDKMetadataAvailable
+              Conditions:
 
 # ... etc
 ```
@@ -261,10 +261,50 @@ AWS also lets us define an error page. If your template outputs this, put that i
 
 Next, we need to grant `publicReadAccess` to make the website viewable by the public. Make sure you do not have any sensitive information in this S3 bucket as this makes _all_ objects in this bucket readable and downloadable by anyone.
 
-Lastly, I have set some removal policies. By default, buckets and objects are retained even when you delete the stack. By experience, when I delete a stack, I want the bucket and the contents deleted as well. I am using git to store and version the source anyway. If you want, you can choose a different policy.
+I have also set some removal policies. By default, buckets and objects are retained even when you delete the stack. By experience, when I delete a stack, I want the bucket and the contents deleted as well. I am using git to store and version the source anyway. If you want, you can choose a different policy.
+
+Lastly, I ran into some CORS difficulties when setting this up. If you do too (your browser won't display the site when it is deployed), you can allow CORS methods by changing your bucket configuration like this:
+
+```typescript
+    const bucket = new Bucket(this, 'bucket', {
+      bucketName: 'maxk.se',
+      websiteIndexDocument: 'index.html',
+      websiteErrorDocument: '404.html',
+      cors: [{
+        allowedMethods: [HttpMethods.GET, HttpMethods.HEAD],
+        allowedOrigins: ['*'],
+        allowedHeaders: ['*']
+      }],
+      publicReadAccess: true,
+      autoDeleteObjects: true,
+      removalPolicy: RemovalPolicy.DESTROY
+    });
+```
 
 Now you have a bucket correctly set up for website hosting. However, you need to upload your site to S3. There are several ways to do this. You could deploy the S3 bucket and then manually upload the site. You could upload it using AWS cli. You could build a continuous delivery pipeline using CDK which automatically builds and uploads the site. We, however, will use the simplest CDK-native way to do this, which is to use the construct called `BucketDeployment` from the `aws-s3-deployment` [module](https://docs.aws.amazon.com/cdk/api/latest/docs/aws-s3-deployment-readme.html). This module is experimental so there is some risk that the API will change, you can check out the documentation if something doesn't work as expected.
 
 ```shell
 yarn add @aws-cdk/aws-s3-deployment
 ```
+
+This construct is a higher-level construct which means it doesn't just map to a specific AWS service like `aws-s3`, but it combines a mix or services to create some complete functionality. In this case, this construct will bundle your static site as a zip and deploy it to S3 using some magic in between - you can see the details in the docs. Other higher-level constructs include things like deploying an container cluster with a load balancer in front using just a few lines. Anyway, the deployment construct is easy to set up.
+
+```typescript
+    new BucketDeployment(this, 'deploy', {
+      sources: [Source.asset('../site/public')],
+      destinationBucket: bucket,
+      retainOnDelete: false
+    });
+```
+
+We simply point the source to where our site is located, and tell the construct to which bucket to deploy it to.
+
+Let's check out the result. Step into your `infra` folder:
+
+```shell
+cdk synth && cdk deploy
+```
+
+Next, log into your AWS console, find your S3 bucket, go to `Properties` and scroll to the bottom. You should see a _Bucket website endpoint_. Click that. If you see your site all deployed and ready, congrats! You made it!
+
+The complete source code for this website including the infrastructure can be found on [GitHub](https://github.com/fongie/static-site-with-aws-cdk). As the repository will continue to be developed as this site develops, the state of the code may change as time goes by.
