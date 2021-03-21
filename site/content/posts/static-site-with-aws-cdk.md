@@ -1,5 +1,5 @@
 +++ 
-draft = true
+draft = false
 date = 2021-03-06T19:29:58+01:00
 title = "Building a static blog with Hugo and deploying it using AWS CDK"
 description = "How I created this blog! Or: quickly creating a static website and deploying it to AWS using CDK"
@@ -133,5 +133,138 @@ Now that you have the CDK client installed it is time for the fun part: setting 
 
 ### Deploying using CDK
 
+Let's create a directory for our infrastructure and initialize the CDK app there. We will be using TypeScript which is the language that CDK itself is written in, but CDK supports multiple languages like Python, Java, and so on.
 
+```shell
+mkdir infra && cd infra
+cdk init app --language typescript
+```
 
+This creates a bunch of files for you. We will keep it simple this time and remove files for writing tests. I know, I know, tests are good, but we will not get into it here. At some point I will write a blog post that includes CDK tests.
+
+```shell
+rm -rf test jest.* *.md
+```
+
+You can also go into `package.json` and remove all `jest` and `test` related entries. Or you can just leave it and not run `yarn test`.
+
+Navigating your new `infra` folder, you will see some `.json` files. These are config files for CDK, TypeScript, and NPM. We probably won't have to touch these in this tutorial.
+
+Next, you have a `bin` and a `lib` folder. The `bin` folder contains a file which serves as the executable when running `cdk` commands like `deploy`. If you check out contents of `cdk.josn`, in the `app` key, you will find the command which is run by CDK when you `cdk something` in this project. As you can see, it points to the file in the `bin` folder.
+
+Open `bin/infra.ts`. It looks like this (as of my CDK version which is 1.91.0):
+
+```typescript
+#!/usr/bin/env node
+import 'source-map-support/register';
+import * as cdk from '@aws-cdk/core';
+import { InfraStack } from '../lib/infra-stack';
+
+const app = new cdk.App();
+new InfraStack(app, 'InfraStack');
+```
+
+As you can see, it just creates a new CDK `App` (all CDK deployments have to haev an `App` as their root) and then creates a new `InfraStack` and passing the app as a parameter.
+
+Passing the app as a parameter to new classes - _constructs_ in CDK language - is something you will see often, and it has to do with some CDK magic called `scope`. You can google some more information on it if you wish, but for now, it it sufficient to say that this means that `InfraStack` will be deployed within the app.
+
+Now, open `lib/infra-stack.ts`. It looks like this:
+
+```typescript
+import * as cdk from '@aws-cdk/core';
+
+export class InfraStack extends cdk.Stack {
+  constructor(scope: cdk.Construct, id: string, props?: cdk.StackProps) {
+    super(scope, id, props);
+
+    // The code that defines your stack goes here
+  }
+}
+```
+
+As you might guess, here is where you are supposed to input code which creates the infrastructure you want. This class extends `Stack`. CDK is built on [CloudFormation](https://aws.amazon.com/cloudformation/) and compiles into a CloudFormation template on deploy. A `Stack` in CloudFormatio - and CDK - terms is a unit of infrastructure deployed together. We will deploy all the resources we need in this tutorial in one stack.
+
+It is not entirely clear to me why CDK has decided it is best practice to separate `App` creation to the `bin` folder and keep source code for the actual infrastructure in `lib`, but that is the default and we will stick to it here. You could just put everything into the same file though if you want, it is just TypeScript - not magic.
+
+Next, let's just check that everything is working so far.
+
+```shell
+cdk synth # in /infra/
+```
+
+This command compiles your code into a CloudFormation template. You should see something like this output in your terminal:
+
+```yaml
+Resources:
+  CDKMetadata:
+      Type: AWS::CDK::Metadata
+          Properties:
+                Modules: aws-cdk=1.92.0,@aws-cdk/cloud-assembly-schema=1.92.0,@aws-cdk/core=1.92.0,@aws-cdk/cx-api=1.92.0,@aws-cdk/region-info=1.92.0,jsii-runtime=node.js/v12.19.0
+                    Metadata:
+                          aws:cdk:path: InfraStack/CDKMetadata/Default
+                              Condition: CDKMetadataAvailable
+                              Conditions:
+
+# ... etc
+```
+
+If you get an error here, you need to fix it before proceeding.
+
+Now, let's identify what AWS resources we need. We are trying to deploy a static website. For that, we are going to use a simple S3 bucket as our storage. Something like in [this tutorial on AWS](https://docs.aws.amazon.com/AmazonS3/latest/userguide/HostingWebsiteOnS3Setup.html).
+
+Because we are going to use S3, we need to first install the S3 module from CDK. CDK doesn't ship a new project with all AWS services enabled - actually, none are. Generally, each time you wish to deploy an AWS service, you need to install the corresponding CDK module first.
+
+```shell
+yarn add @aws-cdk/aws-s3
+```
+
+Now let's _finally_ write some code to create a new S3 bucket. Edit `lib/infra-stack.ts` like this:
+
+```typescript
+import { Bucket } from '@aws-cdk/aws-s3';
+import * as cdk from '@aws-cdk/core';
+
+export class InfraStack extends cdk.Stack {
+  constructor(scope: cdk.Construct, id: string, props?: cdk.StackProps) {
+    super(scope, id, props);
+
+    new Bucket(this, 'bucket');
+  }
+}
+```
+
+Easy! If you step into your `infra` folder and run `cdk synth` now you will see that the template contains some reference to an S3 bucket. If you deployed this, you would deploy a CloudFormation stack to your AWS account which contains one default S3 bucket.
+
+Let's wait with deploying though until we have something more specific to our usecase - deploying a static website. From now on, the code examples will contain the constructor method only - add imports as needed.
+
+The S3 bucket we just wrote will be private. We need to configure it for static website hosting.
+
+CDK constructs are often configured with properties in the constructor. You can often google the module name to find the API doc, like [this one for s3](https://docs.aws.amazon.com/cdk/api/latest/docs/aws-s3-readme.html). Checking the source code can also be a good source for finding out how it works. Anyway, let's configure this bucket.
+
+```typescript
+  constructor(scope: cdk.Construct, id: string, props?: cdk.StackProps) {
+    super(scope, id, props);
+
+    const bucket = new Bucket(this, 'bucket', {
+      websiteIndexDocument: 'index.html',
+      websiteErrorDocument: '404.html',
+      publicReadAccess: true,
+      autoDeleteObjects: true,
+      removalPolicy: RemovalPolicy.DESTROY
+    });
+  }
+```
+
+Reading the CDK S3 documentation, it says that by setting `websiteIndexDocument` you will enable static website hosting for the bucket. This property also points to the index point of your website. Go back to your Hugo site, build it: `hugo`, and check the `public` folder for what your index is called. For us using hugo-coder, it will be `index.html`.
+
+AWS also lets us define an error page. If your template outputs this, put that in there too.
+
+Next, we need to grant `publicReadAccess` to make the website viewable by the public. Make sure you do not have any sensitive information in this S3 bucket as this makes _all_ objects in this bucket readable and downloadable by anyone.
+
+Lastly, I have set some removal policies. By default, buckets and objects are retained even when you delete the stack. By experience, when I delete a stack, I want the bucket and the contents deleted as well. I am using git to store and version the source anyway. If you want, you can choose a different policy.
+
+Now you have a bucket correctly set up for website hosting. However, you need to upload your site to S3. There are several ways to do this. You could deploy the S3 bucket and then manually upload the site. You could upload it using AWS cli. You could build a continuous delivery pipeline using CDK which automatically builds and uploads the site. We, however, will use the simplest CDK-native way to do this, which is to use the construct called `BucketDeployment` from the `aws-s3-deployment` [module](https://docs.aws.amazon.com/cdk/api/latest/docs/aws-s3-deployment-readme.html). This module is experimental so there is some risk that the API will change, you can check out the documentation if something doesn't work as expected.
+
+```shell
+yarn add @aws-cdk/aws-s3-deployment
+```
