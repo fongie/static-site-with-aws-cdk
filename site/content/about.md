@@ -4,6 +4,8 @@ date: 2021-03-05T23:31:53+01:00
 draft: false
 ---
 
-# This is an About page!
+# Hi! I'm Max
 
-Hey hey
+Formerly a national team coach in fencing, an archaeologist, and a street-busking harmonica-player, I am now a software enginner who is currently head of backend and cloud infrastructure development at [Alex Therapeutics](https://www.alextherapeutics.com): a startup in digital therapeutics which develops software medical devices that help improve mental health.
+
+If you wish to get in contact with me, you can check out the social icons on the [front](../index.html), or email me at mkorlinge@gmail.com.

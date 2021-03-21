@@ -1,7 +1,7 @@
 +++ 
 draft = false
 date = 2021-03-06T19:29:58+01:00
-title = "Building a static blog with Hugo and deploying it using AWS CDK"
+title = "Building a static blog with Hugo and deploying it with AWS CDK"
 description = "How I created this blog! Or: quickly creating a static website and deploying it to AWS using CDK"
 slug = "static-site-with-cdk"
 authors = ["Max Körlinge"]
@@ -103,7 +103,7 @@ To make the contact page, then, you need to do this:
 hugo new contact.md
 ```
 
-This will create a new file in `content/contact.md`. The contents of that file will be shown when you click on "Contact me" in the navbar. Do the same for the other urls if you wish, or remove some, or create your own.
+This will create a new file in `content/contact.md`. The contents of that file will be shown when you click on "Contact me" in the navbar. Do the same for the other urls if you wish, or remove some, or create your own. Remember that you also need to set `draft = false` in those files to get them to show up in production later, or you will end up troubleshooting this for hours and feel silly afterwards (which I have definately __NOT__ done).
 
 If you haven't already, you should reload your site at `http://localhost:1313/` and see how it's going.
 

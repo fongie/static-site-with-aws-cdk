@@ -21,7 +21,6 @@ export class InfraStack extends cdk.Stack {
       removalPolicy: RemovalPolicy.DESTROY
     });
 
-
     new BucketDeployment(this, 'deploy', {
       sources: [Source.asset('../site/public')],
       destinationBucket: bucket,
