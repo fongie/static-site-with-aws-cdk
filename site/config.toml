@@ -26,7 +26,7 @@ favicon_16 = "/img/favicon-16x16.png"
 
 #footercontent = "Enter a text here."
 hideFooter = false
-hideCredits = false
+hideCredits = true
 hideCopyright = false
 since = 2020
 
@@ -50,17 +50,17 @@ author = "authors"
 name = "Github"
 icon = "fa fa-github fa-2x"
 weight = 1
-url = "https://github.com/johndoe/"
+url = "https://github.com/fongie/"
 [[params.social]]
-name = "Gitlab"
-icon = "fa fa-gitlab fa-2x"
+name = "LinkedIn"
+icon = "fa fa-linkedin"
 weight = 2
-url = "https://gitlab.com/johndoe/"
+url = "https://www.linkedin.com/in/maxk%C3%B6rlinge/"
 [[params.social]]
-name = "Twitter"
-icon = "fa fa-twitter fa-2x"
+name = "Youtube"
+icon = "fa fa-youtube-play"
 weight = 3
-url = "https://twitter.com/johndoe/"
+url = "https://www.youtube.com/fongie/"
 
 [languages]
 [languages.en]
