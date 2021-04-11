@@ -11,6 +11,37 @@
     "@aws-cdk/cx-api" "1.97.0"
     constructs "^3.3.69"
 
+"@aws-cdk/aws-apigateway@1.97.0":
+  version "1.97.0"
+  resolved "https://registry.yarnpkg.com/@aws-cdk/aws-apigateway/-/aws-apigateway-1.97.0.tgz#71059c63c69365123a325d380edac498545ac9ce"
+  integrity sha512-9K5J3Tj3s6FHsJiCCbDGt4N5YfchuC6m5Ml9egNDSTv3rAQr9zeXTVQwwWfXmbs2AGEYGweUC7sKceCIhihDOQ==
+  dependencies:
+    "@aws-cdk/aws-certificatemanager" "1.97.0"
+    "@aws-cdk/aws-cloudwatch" "1.97.0"
+    "@aws-cdk/aws-cognito" "1.97.0"
+    "@aws-cdk/aws-ec2" "1.97.0"
+    "@aws-cdk/aws-elasticloadbalancingv2" "1.97.0"
+    "@aws-cdk/aws-iam" "1.97.0"
+    "@aws-cdk/aws-lambda" "1.97.0"
+    "@aws-cdk/aws-logs" "1.97.0"
+    "@aws-cdk/aws-s3" "1.97.0"
+    "@aws-cdk/aws-s3-assets" "1.97.0"
+    "@aws-cdk/core" "1.97.0"
+    "@aws-cdk/cx-api" "1.97.0"
+    constructs "^3.3.69"
+
+"@aws-cdk/aws-apigatewayv2@1.97.0":
+  version "1.97.0"
+  resolved "https://registry.yarnpkg.com/@aws-cdk/aws-apigatewayv2/-/aws-apigatewayv2-1.97.0.tgz#2c37b3091264078d23bf018524d90e73eb10bfbf"
+  integrity sha512-mL9yuW1yN1n/rGtMAHmxvJ3Cz79lorfRyeemlZkpRftwITJ4Ijw7WeqpZXBmMbDON5k+v8v894mZbmP9+FtP9A==
+  dependencies:
+    "@aws-cdk/aws-certificatemanager" "1.97.0"
+    "@aws-cdk/aws-cloudwatch" "1.97.0"
+    "@aws-cdk/aws-ec2" "1.97.0"
+    "@aws-cdk/aws-iam" "1.97.0"
+    "@aws-cdk/core" "1.97.0"
+    constructs "^3.3.69"
+
 "@aws-cdk/aws-applicationautoscaling@1.97.0":
   version "1.97.0"
   resolved "https://registry.yarnpkg.com/@aws-cdk/aws-applicationautoscaling/-/aws-applicationautoscaling-1.97.0.tgz#915eafd8900304ec1b681b19a074156107435b3a"
@@ -101,6 +132,19 @@
     "@aws-cdk/core" "1.97.0"
     constructs "^3.3.69"
 
+"@aws-cdk/aws-cognito@1.97.0":
+  version "1.97.0"
+  resolved "https://registry.yarnpkg.com/@aws-cdk/aws-cognito/-/aws-cognito-1.97.0.tgz#013ed4315541eea7ef525e267e02ddf65a8ba086"
+  integrity sha512-a7M0jph3tBL3OLx61pLyGlrA3CrAyZQkCWMYBHEwPy88nSoj4qn5t302zHs7nYWcPQhpCRBNbCISpzcr4PPcxQ==
+  dependencies:
+    "@aws-cdk/aws-certificatemanager" "1.97.0"
+    "@aws-cdk/aws-iam" "1.97.0"
+    "@aws-cdk/aws-lambda" "1.97.0"
+    "@aws-cdk/core" "1.97.0"
+    "@aws-cdk/custom-resources" "1.97.0"
+    constructs "^3.3.69"
+    punycode "^2.1.1"
+
 "@aws-cdk/aws-ec2@1.97.0":
   version "1.97.0"
   resolved "https://registry.yarnpkg.com/@aws-cdk/aws-ec2/-/aws-ec2-1.97.0.tgz#3b8e38fc8fd481cae193e08d5e27e6bd9fadda5c"
@@ -155,6 +199,15 @@
     "@aws-cdk/cx-api" "1.97.0"
     constructs "^3.3.69"
 
+"@aws-cdk/aws-elasticloadbalancing@1.97.0":
+  version "1.97.0"
+  resolved "https://registry.yarnpkg.com/@aws-cdk/aws-elasticloadbalancing/-/aws-elasticloadbalancing-1.97.0.tgz#fabe47149ca84004af65728789b1d3062619d931"
+  integrity sha512-6hnhrniONwZbwOCpRTQjrP8xfFiH7kvPGoyLkpdII7hNt1sHMPlUoQ0iMbmNb4KQg8WkFqCVtF6HA6iU8jbV5g==
+  dependencies:
+    "@aws-cdk/aws-ec2" "1.97.0"
+    "@aws-cdk/core" "1.97.0"
+    constructs "^3.3.69"
+
 "@aws-cdk/aws-elasticloadbalancingv2@1.97.0":
   version "1.97.0"
   resolved "https://registry.yarnpkg.com/@aws-cdk/aws-elasticloadbalancingv2/-/aws-elasticloadbalancingv2-1.97.0.tgz#f57f6751249b289daa9e313e3ffe15bb721a2aee"
@@ -179,6 +232,16 @@
   dependencies:
     "@aws-cdk/aws-iam" "1.97.0"
     "@aws-cdk/core" "1.97.0"
+    constructs "^3.3.69"
+
+"@aws-cdk/aws-globalaccelerator@1.97.0":
+  version "1.97.0"
+  resolved "https://registry.yarnpkg.com/@aws-cdk/aws-globalaccelerator/-/aws-globalaccelerator-1.97.0.tgz#698f0769fbd0953d6e2849efa56561b0824dc43b"
+  integrity sha512-6V3zxhQUfsS6EaJ9efEclERu57F86oFoH7gpR2/q2EvRsE2GSaRsXb5vadMc6tvM8VCMzgwOvNUY9HjsBdAsYQ==
+  dependencies:
+    "@aws-cdk/aws-ec2" "1.97.0"
+    "@aws-cdk/core" "1.97.0"
+    "@aws-cdk/custom-resources" "1.97.0"
     constructs "^3.3.69"
 
 "@aws-cdk/aws-iam@1.97.0":
@@ -234,6 +297,26 @@
     "@aws-cdk/aws-kms" "1.97.0"
     "@aws-cdk/aws-s3-assets" "1.97.0"
     "@aws-cdk/core" "1.97.0"
+    constructs "^3.3.69"
+
+"@aws-cdk/aws-route53-targets@^1.97.0":
+  version "1.97.0"
+  resolved "https://registry.yarnpkg.com/@aws-cdk/aws-route53-targets/-/aws-route53-targets-1.97.0.tgz#aab5690b825e9c0d22aef4d5debf5e6163fdf5b6"
+  integrity sha512-whzn8eniIk/ZjexEDxhQdMzWm4Fpv9xwnlm7sjrjSrBpkAClvEXhBmCqkjvjfqWhQEEhefBWDdXdv2UZRcYUkA==
+  dependencies:
+    "@aws-cdk/aws-apigateway" "1.97.0"
+    "@aws-cdk/aws-apigatewayv2" "1.97.0"
+    "@aws-cdk/aws-cloudfront" "1.97.0"
+    "@aws-cdk/aws-cognito" "1.97.0"
+    "@aws-cdk/aws-ec2" "1.97.0"
+    "@aws-cdk/aws-elasticloadbalancing" "1.97.0"
+    "@aws-cdk/aws-elasticloadbalancingv2" "1.97.0"
+    "@aws-cdk/aws-globalaccelerator" "1.97.0"
+    "@aws-cdk/aws-iam" "1.97.0"
+    "@aws-cdk/aws-route53" "1.97.0"
+    "@aws-cdk/aws-s3" "1.97.0"
+    "@aws-cdk/core" "1.97.0"
+    "@aws-cdk/region-info" "1.97.0"
     constructs "^3.3.69"
 
 "@aws-cdk/aws-route53@1.97.0", "@aws-cdk/aws-route53@^1.97.0":
@@ -1348,7 +1431,7 @@ punycode@1.3.2:
   resolved "https://registry.yarnpkg.com/punycode/-/punycode-1.3.2.tgz#9653a036fb7c1ee42342f2325cceefea3926c48d"
   integrity sha1-llOgNvt8HuQjQvIyXM7v6jkmxI0=
 
-punycode@^2.1.0:
+punycode@^2.1.0, punycode@^2.1.1:
   version "2.1.1"
   resolved "https://registry.yarnpkg.com/punycode/-/punycode-2.1.1.tgz#b58b010ac40c22c5657616c8d2c2c02c7bf479ec"
   integrity sha512-XRsRjdf+j5ml+y/6GKHPZbrF/8p2Yga0JPtdqTIY2Xe5ohJPD9saDJJLPvp9+NSBprVvevdXZybnj2cv8OEd0A==

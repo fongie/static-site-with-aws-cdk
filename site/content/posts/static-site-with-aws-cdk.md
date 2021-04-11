@@ -1,6 +1,6 @@
 +++ 
 draft = false
-date = 2021-03-06T19:29:58+01:00
+date = 2021-04-02T19:29:58+01:00
 title = "Building a static blog with Hugo and deploying it with AWS CDK"
 description = "How I created this blog! Or: quickly creating a static website and deploying it to AWS using CDK"
 slug = "static-site-with-cdk"

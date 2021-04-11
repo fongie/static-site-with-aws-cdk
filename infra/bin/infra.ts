@@ -11,5 +11,5 @@ const env = {
 const app = new cdk.App();
 
 const dns = new Dns(app, 'dns', { env });
-new DevBlog(app, 'dev-blog', { env, dns:  dns.se_maxk });
+new DevBlog(app, 'dev-blog', { env, dns });
 
