@@ -1,20 +1,20 @@
-import { CertificateValidation, DnsValidatedCertificate } from '@aws-cdk/aws-certificatemanager';
-import { AllowedMethods, Distribution, ViewerProtocolPolicy } from '@aws-cdk/aws-cloudfront';
-import { S3Origin } from '@aws-cdk/aws-cloudfront-origins';
-import { ARecord, RecordTarget } from '@aws-cdk/aws-route53';
-import { CloudFrontTarget } from '@aws-cdk/aws-route53-targets';
-import { Bucket, HttpMethods } from '@aws-cdk/aws-s3';
-import { BucketDeployment, Source } from '@aws-cdk/aws-s3-deployment';
-import * as cdk from '@aws-cdk/core';
-import { RemovalPolicy } from '@aws-cdk/core';
 import { Dns } from './dns';
+import { Construct } from 'constructs';
+import { BlockPublicAccess, Bucket, BucketAccessControl, HttpMethods } from 'aws-cdk-lib/aws-s3';
+import { RemovalPolicy, Stack, StackProps } from 'aws-cdk-lib';
+import { BucketDeployment, Source } from 'aws-cdk-lib/aws-s3-deployment';
+import { CertificateValidation, DnsValidatedCertificate } from 'aws-cdk-lib/aws-certificatemanager';
+import { AllowedMethods, Distribution, ViewerProtocolPolicy } from 'aws-cdk-lib/aws-cloudfront';
+import { S3Origin } from 'aws-cdk-lib/aws-cloudfront-origins';
+import { ARecord, RecordTarget } from 'aws-cdk-lib/aws-route53';
+import { CloudFrontTarget } from 'aws-cdk-lib/aws-route53-targets';
 
-export interface DevBlogProps extends cdk.StackProps {
+export interface DevBlogProps extends StackProps {
   readonly dns: Dns;
 }
 
-export class DevBlog extends cdk.Stack {
-  constructor(scope: cdk.Construct, id: string, props: DevBlogProps) {
+export class DevBlog extends Stack {
+  constructor(scope: Construct, id: string, props: DevBlogProps) {
     super(scope, id, props);
 
     const bucket = new Bucket(this, 'bucket', {
@@ -28,7 +28,9 @@ export class DevBlog extends cdk.Stack {
       }],
       publicReadAccess: true,
       autoDeleteObjects: true,
-      removalPolicy: RemovalPolicy.DESTROY
+      removalPolicy: RemovalPolicy.DESTROY,
+      blockPublicAccess: BlockPublicAccess.BLOCK_ACLS,
+      accessControl: BucketAccessControl.BUCKET_OWNER_FULL_CONTROL,
     });
 
     new BucketDeployment(this, 'deploy', {

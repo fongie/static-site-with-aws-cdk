@@ -1,16 +1,17 @@
-import { HostedZone, PublicHostedZone } from '@aws-cdk/aws-route53';
-import * as cdk from '@aws-cdk/core';
+import { Stack, StackProps } from "aws-cdk-lib";
+import { HostedZone, PublicHostedZone } from "aws-cdk-lib/aws-route53";
+import { Construct } from "constructs";
 
-export interface DnsProps extends cdk.StackProps {
+export interface DnsProps extends StackProps {
 
 }
 
-export class Dns extends cdk.Stack {
+export class Dns extends Stack {
     private _com_maxkorlinge: HostedZone;
     private _com_maxkörlinge: HostedZone;
     private _se_maxkörlinge: HostedZone;
     private _se_maxk: HostedZone;
-    constructor(scope: cdk.Construct, id: string, props: DnsProps) {
+    constructor(scope: Construct, id: string, props: DnsProps) {
         super(scope, id, props);
 
         this._com_maxkorlinge = new PublicHostedZone(this, 'com-maxkorlinge', {
