@@ -14,9 +14,9 @@ disqusShortname = "yourdiscussshortname"
 
 [params]
 author = "Max Körlinge"
-info = "Software Engineer - Backend & Devops"
+info = "CTO - Software Engineer"
 description = "Max Körlinge's developer blog"
-keywords = "blog,developer,software engineer,personal"
+keywords = "blog,developer,software engineer,cto,personal"
 avatarurl = "images/avatar.png"
 #avatarurl = "images/bk-avatar.jpg"
 #gravatar = "john.doe@example.com"
